@@ -1,0 +1,80 @@
+playing_field = [["-"]*3 for i in range(3)]
+
+def game():
+    print(f"* | 0 | 1 | 2 | ")
+    print(f"-----------------")
+    for i in range(3):
+        print(f"{i} | {playing_field[i][0]} | {playing_field[i][1]} | {playing_field[i][2]} |")
+        print(f"-----------------")
+    print(f"  |   |   |   | * ")
+
+
+def input_():
+    while True:
+        motion = input("         Ваш ход:   ").split()
+        if len(motion) != 2:
+            print("Введите 2 координаты в диапазоне от 0 до 2")
+            continue
+
+        x, y = motion
+
+        if not (x.isdigit()) or not (y.isdigit()):
+            print("Введите числа")
+            continue
+
+        x, y = int(x), int(y)
+
+        if 0 > x or x > 2 or 0 > y or y > 2:
+            print("Введите 2 координаты в диапазоне от 0 до 2")
+            continue
+
+        if playing_field[x][y] != "-":
+            print("Выберите другую клетку")
+            continue
+
+        return x, y
+
+
+def victory():
+    winner = [((0, 0), (0, 1), (0, 2)), ((1, 0), (1, 1), (1, 2)), ((2, 0), (2, 1), (2, 2)),
+                ((0, 0), (1, 0), (2, 0)), ((0, 1), (1, 1), (2, 1)), ((0, 2), (1, 2), (2, 2)),
+                ((0, 0), (1, 1), (2, 2)), ((2, 0), (1, 1), (0, 2))]
+    for cell in winner:
+        a = cell[0]
+        b = cell[1]
+        c = cell[2]
+
+        if playing_field[a[0]][a[1]] == playing_field[b[0]][b[1]] == playing_field[c[0]][c[1]] != "-":
+            game()
+            if playing_field[a[0]][a[1]] == "X":
+                print(f"Выйграл Крестик!")
+            else:
+                print(f"Выйграл Нолик!")
+            return True
+    return False
+
+num = 0
+while True:
+    num += 1
+    game()
+    if num % 2 == 1:
+        print("==================================")
+        print("Введите координаты для Крестика")
+    else:
+        print("==================================")
+        print("Введите координаты для Нолика")
+    x, y = input_()
+
+    if num % 2 == 1:
+        playing_field[x][y] = "X"
+    else:
+        playing_field[x][y] = "O"
+
+
+    if victory():
+        break
+
+
+    if num == 9:
+        print("Ничья")
+        break
